@@ -13,7 +13,7 @@ import Accelerate
 
 // SLOW PARTS: x[ndarray, ndarray] set
 
-struct ndarray {
+public struct ndarray {
     let n: Int // the number of elements
     var count: Int // ditto
     var grid: [Double] // the raw values

@@ -8,7 +8,7 @@
 
 import Foundation
 import Accelerate
-struct matrix {
+public struct matrix {
     let n: Int
     var rows: Int
     var columns: Int
@@ -66,7 +66,7 @@ struct matrix {
     func dot(x: ndarray) -> ndarray{
         var y = zeros((x.n, 1))
         y.flat = x
-        var z = self.dot(y)
+        let z = self.dot(y)
         return z.flat
     }
     func min(axis:Int = -1) -> Double{
@@ -228,20 +228,3 @@ struct matrix {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

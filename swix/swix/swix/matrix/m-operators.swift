@@ -69,84 +69,84 @@ func <- (inout lhs:matrix, rhs:Double){
 
 // SOLVE
 infix operator !/ {associativity none precedence 140}
-func !/ (lhs: matrix, rhs: ndarray) -> ndarray{
+public func !/ (lhs: matrix, rhs: ndarray) -> ndarray{
     return solve(lhs, b: rhs)}
 // EQUALITY
-func ~== (lhs: matrix, rhs: matrix) -> Bool{
+public func ~== (lhs: matrix, rhs: matrix) -> Bool{
     return (rhs.flat ~== lhs.flat)}
 
 infix operator == {associativity none precedence 140}
-func == (lhs: matrix, rhs: matrix)->matrix{
+public func == (lhs: matrix, rhs: matrix)->matrix{
     return (lhs.flat == rhs.flat).reshape(lhs.shape)
 }
 infix operator !== {associativity none precedence 140}
-func !== (lhs: matrix, rhs: matrix)->matrix{
+public func !== (lhs: matrix, rhs: matrix)->matrix{
     return (lhs.flat !== rhs.flat).reshape(lhs.shape)
 }
 
 /// ELEMENT WISE OPERATORS
 // PLUS
 infix operator + {associativity none precedence 140}
-func + (lhs: matrix, rhs: matrix) -> matrix{
+public func + (lhs: matrix, rhs: matrix) -> matrix{
     return make_operator(lhs, operation: "+", rhs: rhs)}
-func + (lhs: Double, rhs: matrix) -> matrix{
+public func + (lhs: Double, rhs: matrix) -> matrix{
     return make_operator(lhs, operation: "+", rhs: rhs)}
-func + (lhs: matrix, rhs: Double) -> matrix{
+public func + (lhs: matrix, rhs: Double) -> matrix{
     return make_operator(lhs, operation: "+", rhs: rhs)}
 // MINUS
 infix operator - {associativity none precedence 140}
-func - (lhs: matrix, rhs: matrix) -> matrix{
+public func - (lhs: matrix, rhs: matrix) -> matrix{
     return make_operator(lhs, operation: "-", rhs: rhs)}
-func - (lhs: Double, rhs: matrix) -> matrix{
+public func - (lhs: Double, rhs: matrix) -> matrix{
     return make_operator(lhs, operation: "-", rhs: rhs)}
-func - (lhs: matrix, rhs: Double) -> matrix{
+public func - (lhs: matrix, rhs: Double) -> matrix{
     return make_operator(lhs, operation: "-", rhs: rhs)}
 // TIMES
-infix operator * {associativity none precedence 140}
-func * (lhs: matrix, rhs: matrix) -> matrix{
+infix operator * {associativity left precedence 140}
+public func * (lhs: matrix, rhs: matrix) -> matrix{
     return make_operator(lhs, operation: "*", rhs: rhs)}
-func * (lhs: Double, rhs: matrix) -> matrix{
+public func * (lhs: Double, rhs: matrix) -> matrix{
     return make_operator(lhs, operation: "*", rhs: rhs)}
-func * (lhs: matrix, rhs: Double) -> matrix{
+public func * (lhs: matrix, rhs: Double) -> matrix{
     return make_operator(lhs, operation: "*", rhs: rhs)}
 // DIVIDE
 infix operator / {associativity none precedence 140}
-func / (lhs: matrix, rhs: matrix) -> matrix{
+public func / (lhs: matrix, rhs: matrix) -> matrix{
     return make_operator(lhs, operation: "/", rhs: rhs)
 }
-func / (lhs: Double, rhs: matrix) -> matrix{
+public func / (lhs: Double, rhs: matrix) -> matrix{
     return make_operator(lhs, operation: "/", rhs: rhs)}
-func / (lhs: matrix, rhs: Double) -> matrix{
+public func / (lhs: matrix, rhs: Double) -> matrix{
     return make_operator(lhs, operation: "/", rhs: rhs)}
 // LESS THAN
 infix operator < {associativity none precedence 140}
-func < (lhs: matrix, rhs: Double) -> matrix{
+public func < (lhs: matrix, rhs: Double) -> matrix{
     return make_operator(lhs, operation: "<", rhs: rhs)}
-func < (lhs: matrix, rhs: matrix) -> matrix{
+public func < (lhs: matrix, rhs: matrix) -> matrix{
     return make_operator(lhs, operation: "<", rhs: rhs)}
-func < (lhs: Double, rhs: matrix) -> matrix{
+public func < (lhs: Double, rhs: matrix) -> matrix{
     return make_operator(lhs, operation: "<", rhs: rhs)}
 // GREATER THAN
 infix operator > {associativity none precedence 140}
-func > (lhs: matrix, rhs: Double) -> matrix{
+public func > (lhs: matrix, rhs: Double) -> matrix{
     return make_operator(lhs, operation: ">", rhs: rhs)}
-func > (lhs: matrix, rhs: matrix) -> matrix{
+public func > (lhs: matrix, rhs: matrix) -> matrix{
     return make_operator(lhs, operation: ">", rhs: rhs)}
-func > (lhs: Double, rhs: matrix) -> matrix{
+public func > (lhs: Double, rhs: matrix) -> matrix{
     return make_operator(lhs, operation: ">", rhs: rhs)}
 // GREATER THAN OR EQUAL
 infix operator >= {associativity none precedence 140}
-func >= (lhs: matrix, rhs: Double) -> matrix{
+public func >= (lhs: matrix, rhs: Double) -> matrix{
     return make_operator(lhs, operation: ">=", rhs: rhs)}
-func >= (lhs: matrix, rhs: matrix) -> matrix{
+public func >= (lhs: matrix, rhs: matrix) -> matrix{
     return make_operator(lhs, operation: ">=", rhs: rhs)}
-func >= (lhs: Double, rhs: matrix) -> matrix{
+public func >= (lhs: Double, rhs: matrix) -> matrix{
     return make_operator(lhs, operation: ">=", rhs: rhs)}
 // LESS THAN OR EQUAL
 infix operator <= {associativity none precedence 140}
-func <= (lhs: matrix, rhs: Double) -> matrix{
+public func <= (lhs: matrix, rhs: Double) -> matrix{
     return make_operator(lhs, operation: "<=", rhs: rhs)}
-func <= (lhs: matrix, rhs: matrix) -> matrix{
+public func <= (lhs: matrix, rhs: matrix) -> matrix{
     return make_operator(lhs, operation: "<=", rhs: rhs)}
-func <= (lhs: Double, rhs: matrix) -> matrix{
+public func <= (lhs: Double, rhs: matrix) -> matrix{
     return make_operator(lhs, operation: "<=", rhs: rhs)}

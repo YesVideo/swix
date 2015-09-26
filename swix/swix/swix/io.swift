@@ -9,12 +9,12 @@
 import Foundation
 
 // ndarray binary
-func write_binary(x:ndarray, filename:String, prefix:String=S2_PREFIX){
+public func write_binary(x:ndarray, filename:String, prefix:String=S2_PREFIX){
     let N = x.n
     let data = NSData(bytes:!x, length:N*sizeof(Double))
     data.writeToFile(prefix+"../"+filename, atomically: false)
 }
-func read_binary(filename:String, prefix:String=S2_PREFIX) -> ndarray{
+public func read_binary(filename:String, prefix:String=S2_PREFIX) -> ndarray{
     let read = NSData(contentsOfFile: prefix+"../"+filename)
     let l:Int! = read?.length
     let sD:Int = sizeof(Double)
@@ -26,11 +26,11 @@ func read_binary(filename:String, prefix:String=S2_PREFIX) -> ndarray{
 }
 
 // matrix binary
-func write_binary(x:matrix, filename:String, prefix:String=S2_PREFIX){
+public func write_binary(x:matrix, filename:String, prefix:String=S2_PREFIX){
     let y = concat(array(x.shape.0.double, x.shape.1.double), y: x.flat)
     write_binary(y, filename:filename, prefix:prefix)
 }
-func read_binary(filename:String, prefix:String=S2_PREFIX)->matrix{
+public func read_binary(filename:String, prefix:String=S2_PREFIX)->matrix{
     var a:ndarray = read_binary(filename, prefix:prefix)
     let (w, h) = (a[0], a[1])
     return reshape(a[2..<a.n], shape: (w.int,h.int))
@@ -38,7 +38,7 @@ func read_binary(filename:String, prefix:String=S2_PREFIX)->matrix{
 
 
 // ndarray csv
-func write_csv(x:ndarray, filename:String, prefix:String=S2_PREFIX){
+public func write_csv(x:ndarray, filename:String, prefix:String=S2_PREFIX){
     // write the array to CSV
     var seperator=","
     var str = ""
@@ -54,7 +54,7 @@ func write_csv(x:ndarray, filename:String, prefix:String=S2_PREFIX){
     }
     
 }
-func read_csv(filename:String, prefix:String=S2_PREFIX) -> ndarray{
+public func read_csv(filename:String, prefix:String=S2_PREFIX) -> ndarray{
     var x: String?
     do {
         x = try String(contentsOfFile: prefix+"../"+filename, encoding: NSUTF8StringEncoding)
@@ -76,7 +76,7 @@ func read_csv(filename:String, prefix:String=S2_PREFIX) -> ndarray{
 }
 
 // matrix csv
-func read_csv(filename:String, prefix:String=S2_PREFIX) -> matrix{
+public func read_csv(filename:String, prefix:String=S2_PREFIX) -> matrix{
     var x: String?
     do {
         x = try String(contentsOfFile: prefix+"../"+filename, encoding: NSUTF8StringEncoding)
@@ -99,7 +99,7 @@ func read_csv(filename:String, prefix:String=S2_PREFIX) -> matrix{
     done.flat.grid = array
     return done
 }
-func write_csv(x:matrix, filename:String, prefix:String=S2_PREFIX){
+public func write_csv(x:matrix, filename:String, prefix:String=S2_PREFIX){
     var seperator=","
     var str = ""
     for i in 0..<x.shape.0{

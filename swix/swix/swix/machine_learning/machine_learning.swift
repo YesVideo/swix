@@ -8,7 +8,7 @@
 
 import Foundation
 
-class SVM {
+public class SVM {
     // swift --> objc --> objc++ --> c++
     var cvsvm:cvSVM;
     var svm_type:String
@@ -52,7 +52,7 @@ class SVM {
         return y
     }
 }
-class kNearestNeighbors{
+public class kNearestNeighbors{
     // finds the nearest neighbor over all points. if want to change, dive into knn.mm and change `int k = cvknn.get_max_k();` in `predict(...)`
     var T:Double
     var knn:kNN;

@@ -24,7 +24,7 @@ import Foundation
 //import UIKit // for iOS use
 //import CoreGraphics // possibly needed for iOS use
 
-func rgb2hsv_pixel(R:Double, G:Double, B:Double)->(Double, Double, Double){
+public func rgb2hsv_pixel(R:Double, G:Double, B:Double)->(Double, Double, Double){
     // tested against wikipedia/HSL_and_HSV. returns (H, S_hsv, V)
     let M = max(array(R, G, B))
     let m = min(array(R, G, B))
@@ -42,7 +42,7 @@ func rgb2hsv_pixel(R:Double, G:Double, B:Double)->(Double, Double, Double){
 }
 
 
-func rgb2hsv(r:matrix, g:matrix, b:matrix)->(matrix, matrix, matrix){
+public func rgb2hsv(r:matrix, g:matrix, b:matrix)->(matrix, matrix, matrix){
     assert(r.shape.0 == g.shape.0)
     assert(b.shape.0 == g.shape.0)
     assert(r.shape.1 == g.shape.1)
@@ -60,12 +60,13 @@ func rgb2hsv(r:matrix, g:matrix, b:matrix)->(matrix, matrix, matrix){
     }
     return (h, s, v)
 }
-func rgb2_hsv_vplane(r:matrix, g:matrix, b:matrix)->matrix{
+public func rgb2_hsv_vplane(r:matrix, g:matrix, b:matrix)->matrix{
     return max(max(r, y: g), y: b)
 }
 
 
-func savefig(x:matrix, filename:String, save:Bool=true, show:Bool=false){
+#if os(OSX)
+public func savefig(x:matrix, filename:String, save:Bool=true, show:Bool=false){
     // assumes Python is on your $PATH and pylab/etc are installed
     // prefix should point to the swix folder!
     // prefix is defined in numbers.swift
@@ -74,93 +75,96 @@ func savefig(x:matrix, filename:String, save:Bool=true, show:Bool=false){
     system("cd "+S2_PREFIX+"; "+PYTHON_PATH + " imshow.py \(filename) \(save) \(show)")
     system("rm "+S2_PREFIX+"temp.csv")
 }
-func imshow(x: matrix){
+public func imshow(x: matrix){
     savefig(x, filename: "junk", save:false, show:true)
 }
+#endif
 
-//func UIImageToRGBA(image:UIImage)->(matrix, matrix, matrix, matrix){
-//    // returns red, green, blue and alpha channels
-//    
-//    // init'ing
-//    var imageRef = image.CGImage
-//    var width = CGImageGetWidth(imageRef)
-//    var height = CGImageGetHeight(imageRef)
-//    var colorSpace = CGColorSpaceCreateDeviceRGB()
-//    var bytesPerPixel = 4
-//    var bytesPerRow:UInt = UInt(bytesPerPixel) * UInt(width)
-//    var bitsPerComponent:UInt = 8
-//    var pix = Int(width) * Int(height)
-//    var count:Int = 4*Int(pix)
-//    
-//    // pulling the color out of the image
-//    var rawData = UnsafeMutablePointer<UInt8>.alloc(4 * width * height)
-//    var temp = CGImageAlphaInfo.PremultipliedLast.rawValue
-//    var bitmapInfo = CGBitmapInfo(rawValue:temp)
-//    var context = CGBitmapContextCreate(rawData, Int(width), Int(height), Int(bitsPerComponent), Int(bytesPerRow), colorSpace, temp)
-//    CGContextDrawImage(context, CGRectMake(0,0,CGFloat(width), CGFloat(height)), imageRef)
-//    
-//    
-//    // unsigned char to double conversion
-//    var rawDataArray = zeros(count)-1
-//    vDSP_vfltu8D(rawData, 1.stride, !(rawDataArray), 1, count.length)
-//    
-//    // pulling the RGBA channels out of the color
-//    var i = arange(pix)
-//    var r = zeros((Int(height), Int(width)))-1;
-//    r.flat = rawDataArray[4*i+0]
-//    
-//    var g = zeros((Int(height), Int(width)));
-//    g.flat = rawDataArray[4*i+1]
-//    
-//    var b = zeros((Int(height), Int(width)));
-//    b.flat = rawDataArray[4*i+2]
-//    
-//    var a = zeros((Int(height), Int(width)));
-//    a.flat = rawDataArray[4*i+3]
-//    return (r, g, b, a)
-//}
-//func RGBAToUIImage(r:matrix, g:matrix, b:matrix, a:matrix)->UIImage{
-//    // might be useful! [1]
-//    // [1]:http://stackoverflow.com/questions/30958427/pixel-array-to-uiimage-in-swift
-//    // setup
-//    var height = r.shape.0
-//    var width = r.shape.1
-//    var area = height * width
-//    var componentsPerPixel = 4 // rgba
-//    var compressedPixelData = zeros(4*area)
-//    var N = width * height
-//    
-//    // double to unsigned int
-//    var i = arange(N)
-//    compressedPixelData[4*i+0] = r.flat
-//    compressedPixelData[4*i+1] = g.flat
-//    compressedPixelData[4*i+2] = b.flat
-//    compressedPixelData[4*i+3] = a.flat
-//    var pixelData:[CUnsignedChar] = Array(count:area*componentsPerPixel, repeatedValue:0)
-//    vDSP_vfixu8D(&compressedPixelData.grid, 1, &pixelData, 1, vDSP_Length(componentsPerPixel*area))
-//    
-//    // creating the bitmap context
-//    var colorSpace = CGColorSpaceCreateDeviceRGB()
-//    var bitsPerComponent = 8
-//    var bytesPerRow = ((bitsPerComponent * width) / 8) * componentsPerPixel
-//    var temp = CGImageAlphaInfo.PremultipliedLast.rawValue
-//    var bitmapInfo = CGBitmapInfo(rawValue:temp)
-//    var context = CGBitmapContextCreate(&pixelData, Int(width), Int(height), Int(bitsPerComponent), Int(bytesPerRow), colorSpace, temp)
-//    
-//    // creating the image
-//    var toCGImage = CGBitmapContextCreateImage(context)!
-//    var image:UIImage = UIImage.init(CGImage:toCGImage)
-//    return image
-//}
-//func resizeImage(image:UIImage, shape:(Int, Int)) -> UIImage{
-//    // nice variables
-//    var (height, width) = shape
-//    var cgSize = CGSizeMake(CGFloat(width), CGFloat(height))
-//    
-//    // draw on new CGSize
-//    UIGraphicsBeginImageContextWithOptions(cgSize, false, 0.0)
-//    image.drawInRect(CGRectMake(CGFloat(0), CGFloat(0), CGFloat(width), CGFloat(height)))
-//    var newImage = UIGraphicsGetImageFromCurrentImageContext()
-//    UIGraphicsEndImageContext()
-//    return newImage
-//}
+#if os(iOS)
+public func UIImageToRGBA(image:UIImage)->(matrix, matrix, matrix, matrix){
+    // returns red, green, blue and alpha channels
+    
+    // init'ing
+    let imageRef = image.CGImage
+    let width = CGImageGetWidth(imageRef)
+    let height = CGImageGetHeight(imageRef)
+    let colorSpace = CGColorSpaceCreateDeviceRGB()
+    let bytesPerPixel = 4
+    let bytesPerRow:UInt = UInt(bytesPerPixel) * UInt(width)
+    let bitsPerComponent:UInt = 8
+    let pix = Int(width) * Int(height)
+    let count:Int = 4*Int(pix)
+    
+    // pulling the color out of the image
+    let rawData = UnsafeMutablePointer<UInt8>.alloc(4 * width * height)
+    let temp = CGImageAlphaInfo.PremultipliedLast.rawValue
+//    let bitmapInfo = CGBitmapInfo(rawValue:temp)
+    let context = CGBitmapContextCreate(rawData, Int(width), Int(height), Int(bitsPerComponent), Int(bytesPerRow), colorSpace, temp)
+    CGContextDrawImage(context, CGRectMake(0,0,CGFloat(width), CGFloat(height)), imageRef)
+    
+    
+    // unsigned char to double conversion
+    var rawDataArray = zeros(count)-1
+    vDSP_vfltu8D(rawData, 1.stride, !(rawDataArray), 1, count.length)
+    
+    // pulling the RGBA channels out of the color
+    let i = arange(pix)
+    var r = zeros((Int(height), Int(width)))-1;
+    r.flat = rawDataArray[4*i+0]
+    
+    var g = zeros((Int(height), Int(width)));
+    g.flat = rawDataArray[4*i+1]
+    
+    var b = zeros((Int(height), Int(width)));
+    b.flat = rawDataArray[4*i+2]
+    
+    var a = zeros((Int(height), Int(width)));
+    a.flat = rawDataArray[4*i+3]
+    return (r, g, b, a)
+}
+public func RGBAToUIImage(r:matrix, g:matrix, b:matrix, a:matrix)->UIImage{
+    // might be useful! [1]
+    // [1]:http://stackoverflow.com/questions/30958427/pixel-array-to-uiimage-in-swift
+    // setup
+    let height = r.shape.0
+    let width = r.shape.1
+    let area = height * width
+    let componentsPerPixel = 4 // rgba
+    var compressedPixelData = zeros(4*area)
+    let N = width * height
+    
+    // double to unsigned int
+    let i = arange(N)
+    compressedPixelData[4*i+0] = r.flat
+    compressedPixelData[4*i+1] = g.flat
+    compressedPixelData[4*i+2] = b.flat
+    compressedPixelData[4*i+3] = a.flat
+    var pixelData:[CUnsignedChar] = Array(count:area*componentsPerPixel, repeatedValue:0)
+    vDSP_vfixu8D(&compressedPixelData.grid, 1, &pixelData, 1, vDSP_Length(componentsPerPixel*area))
+    
+    // creating the bitmap context
+    let colorSpace = CGColorSpaceCreateDeviceRGB()
+    let bitsPerComponent = 8
+    let bytesPerRow = ((bitsPerComponent * width) / 8) * componentsPerPixel
+    let temp = CGImageAlphaInfo.PremultipliedLast.rawValue
+//    let bitmapInfo = CGBitmapInfo(rawValue:temp)
+    let context = CGBitmapContextCreate(&pixelData, Int(width), Int(height), Int(bitsPerComponent), Int(bytesPerRow), colorSpace, temp)
+    
+    // creating the image
+    let toCGImage = CGBitmapContextCreateImage(context)!
+    let image:UIImage = UIImage.init(CGImage:toCGImage)
+    return image
+}
+public func resizeImage(image:UIImage, shape:(Int, Int)) -> UIImage{
+    // nice variables
+    let (height, width) = shape
+    let cgSize = CGSizeMake(CGFloat(width), CGFloat(height))
+    
+    // draw on new CGSize
+    UIGraphicsBeginImageContextWithOptions(cgSize, false, 0.0)
+    image.drawInRect(CGRectMake(CGFloat(0), CGFloat(0), CGFloat(width), CGFloat(height)))
+    let newImage = UIGraphicsGetImageFromCurrentImageContext()
+    UIGraphicsEndImageContext()
+    return newImage
+}
+#endif

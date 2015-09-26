@@ -33,19 +33,19 @@ func pe1(){
 }
 func pe10(){
     // find all primes
-    var N = 2e6.int
+    let N = 2e6.int
     var primes = arange(Double(N))
-    var top = (sqrt(N.double)).int
+    let top = (sqrt(N.double)).int
     for i in 2 ..< top{
-        var max:Int = (N/i)
-        var j = arange(2, max: max.double) * i.double
+        let max:Int = (N/i)
+        let j = arange(2, max: max.double) * i.double
         primes[j] *= 0.0
     }
     // sum(primes) is the correct answer
 }
 func pe73(){
-    var N = 1e3
-    var i = arange(N)+1
+    let N = 1e3
+    let i = arange(N)+1
     var (n, d) = meshgrid(i, y: i)
     
     var f = (n / d).flat
@@ -57,10 +57,10 @@ func pe73(){
 
 func soft_thresholding(){
     let N = 1e2.int
-    var j = linspace(-1, max: 1, num:N)
+    let j = linspace(-1, max: 1, num:N)
     var (x, y) = meshgrid(j, y: j)
     var z = pow(x, power: 2) + pow(y, power: 2)
-    var i = abs(z) < 0.5
+    let i = abs(z) < 0.5
     z[argwhere(i)] *= 0
     z[argwhere(1-i)] -= 0.5
 }

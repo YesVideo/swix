@@ -18,10 +18,10 @@ func matrixToPointer(x: [Int])->UnsafeMutablePointer<Int>{
 }
 
 /// use !x to get the address. I tried &x but that doesn't work in beta3.
-prefix func ! (x: ndarray) -> UnsafeMutablePointer<Double> {
+public prefix func ! (x: ndarray) -> UnsafeMutablePointer<Double> {
     return matrixToPointer(x)
 }
-prefix func ! (x: matrix) -> UnsafeMutablePointer<Double> {
+public prefix func ! (x: matrix) -> UnsafeMutablePointer<Double> {
     return matrixToPointer(x.flat)
 }
 

@@ -15,15 +15,15 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        var img = UIImage(named: "space_shuttle.png")!
+        let img = UIImage(named: "space_shuttle.png")!
         self.imageView.image = img
         
 
     }
     @IBAction func changeImage(sender: AnyObject) {
-        var N = 500
-        var x = 255*rand((N, N))
-        var img2 = RGBAToUIImage(x, g: x, b: x, a: 255*ones(x.shape))
+        let N = 500
+        let x = 255*rand((N, N))
+        let img2 = RGBAToUIImage(x, g: x, b: x, a: 255*ones(x.shape))
         
         self.imageView.image = img2
     }

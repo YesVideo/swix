@@ -49,8 +49,8 @@ Pod::Spec.new do |s|
   #  the deployment target. You can optionally include the target after the platform.
   #
 
-  s.platform     = :ios
-  s.platform     = :ios, "8.0"
+  # s.platform     = :ios
+  # s.platform     = :ios, "8.0"
 
   # ――― Source Location ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
@@ -69,8 +69,9 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "swix/swix/swix/*"
-  # s.exclude_files = "swix/swix/swix/main.swift/Exclude"
+  s.source_files  = "swix/swix/swix/**/*.swift", "swix/swix/swix/objc/*.{h,mm,m}", 
+  s.source_files  = "swix/swix/swix/**/*.swift"
+  s.exclude_files = "swix/swix/swix/tests/*"
 
   # s.public_header_files = "Classes/**/*.h"
 
@@ -95,6 +96,7 @@ Pod::Spec.new do |s|
   #  the lib prefix of their name.
   #
 
+  s.vendored_frameworks = 'swix/swix/swix/objc/opencv2.framework'
   s.framework  = "Accelerate"
 
   # s.library   = "iconv"
