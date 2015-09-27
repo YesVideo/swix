@@ -8,7 +8,7 @@
 
 import Foundation
 import Accelerate
-public struct matrix {
+public struct matrix: CustomStringConvertible {
     let n: Int
     var rows: Int
     var columns: Int
@@ -18,7 +18,12 @@ public struct matrix {
     var T:matrix {return transpose(self)}
     var I:matrix {return inv(self)}
     var pI:matrix {return pinv(self)}
-    init(columns: Int, rows: Int) {
+
+    public var description: String {
+        return flat.description
+    }
+    
+    public init(columns: Int, rows: Int) {
         self.n = rows * columns
         self.rows = rows
         self.columns = columns
@@ -27,12 +32,12 @@ public struct matrix {
         self.flat = zeros(rows * columns)
         
     }
-    func copy()->matrix{
+    public func copy()->matrix{
         var y = zeros_like(self)
         y.flat = self.flat.copy()
         return y
     }
-    subscript(i: String) -> ndarray {
+    public subscript(i: String) -> ndarray {
         get {
             assert(i == "diag", "Currently the only support x[string] is x[\"diag\"]")
             let size = rows < columns ? rows : columns
@@ -48,10 +53,10 @@ public struct matrix {
             self[j + j/n.double] = newValue
         }
     }
-    func indexIsValidForRow(r: Int, c: Int) -> Bool {
+    public func indexIsValidForRow(r: Int, c: Int) -> Bool {
         return r >= 0 && r < rows && c>=0 && c < columns
     }
-    func dot(y: matrix) -> matrix{
+    public func dot(y: matrix) -> matrix{
         let (Mx, Nx) = self.shape
         let (My, Ny) = y.shape
         assert(Nx == My, "Matrix sizes not compatible for dot product")
@@ -63,13 +68,13 @@ public struct matrix {
             !z, Ny.cint)
         return z
     }
-    func dot(x: ndarray) -> ndarray{
+    public func dot(x: ndarray) -> ndarray{
         var y = zeros((x.n, 1))
         y.flat = x
         let z = self.dot(y)
         return z.flat
     }
-    func min(axis:Int = -1) -> Double{
+    public func min(axis:Int = -1) -> Double{
         if axis == -1{
             return self.flat.min()
         }
@@ -77,14 +82,14 @@ public struct matrix {
         assert(false, "max(x, axis:Int) for maximum of each row is not implemented yet. Use max(A.flat) or A.flat.max() to get the global maximum")
 
     }
-    func max(axis:Int = -1) -> Double{
+    public func max(axis:Int = -1) -> Double{
         if axis == -1 {
             return self.flat.max()
         }
         assert(axis==0 || axis==1, "Axis must be 0 or 1 as matrix only has two dimensions")
         assert(false, "max(x, axis:Int) for maximum of each row is not implemented yet. Use max(A.flat) or A.flat.max() to get the global maximum")
     }
-    subscript(i: Int, j: Int) -> Double {
+    public subscript(i: Int, j: Int) -> Double {
         // x[0,0]
         get {
             var nI = i
@@ -103,7 +108,7 @@ public struct matrix {
             flat[nI * columns + nJ] = newValue
         }
     }
-    subscript(i: Range<Int>, k: Int) -> ndarray {
+    public subscript(i: Range<Int>, k: Int) -> ndarray {
         // x[0..<2, 0]
         get {
             let idx = asarray(i)
@@ -114,7 +119,7 @@ public struct matrix {
             self[idx, k] = newValue
         }
     }
-    subscript(r: Range<Int>, c: Range<Int>) -> matrix {
+    public subscript(r: Range<Int>, c: Range<Int>) -> matrix {
         // x[0..<2, 0..<2]
         get {
             let rr = asarray(r)
@@ -127,7 +132,7 @@ public struct matrix {
             self[rr, cc] = newValue
         }
     }
-    subscript(i: Int, k: Range<Int>) -> ndarray {
+    public subscript(i: Int, k: Range<Int>) -> ndarray {
         // x[0, 0..<2]
         get {
             let idx = asarray(k)
@@ -138,7 +143,7 @@ public struct matrix {
             self[i, idx] = newValue
         }
     }
-    subscript(or: ndarray, oc: ndarray) -> matrix {
+    public subscript(or: ndarray, oc: ndarray) -> matrix {
         // the main method.
         // x[array(1,2), array(3,4)]
         get {
@@ -165,12 +170,12 @@ public struct matrix {
             }
         }
     }
-    subscript(r: ndarray) -> ndarray {
+    public subscript(r: ndarray) -> ndarray {
         // flat indexing
         get {return self.flat[r]}
         set {self.flat[r] = newValue }
     }
-    subscript(i: String, k:Int) -> ndarray {
+    public subscript(i: String, k:Int) -> ndarray {
         // x["all", 0]
         get {
             let idx = arange(shape.0)
@@ -182,7 +187,7 @@ public struct matrix {
             self.flat[idx * self.columns.double + k.double] = newValue
         }
     }
-    subscript(i: Int, k: String) -> ndarray {
+    public subscript(i: Int, k: String) -> ndarray {
         // x[0, "all"]
         get {
             assert(k == "all", "Only 'all' supported")
@@ -196,7 +201,7 @@ public struct matrix {
             self.flat[i.double * self.columns.double + idx] = newValue
         }
     }
-    subscript(i: ndarray, k: Int) -> ndarray {
+    public subscript(i: ndarray, k: Int) -> ndarray {
         // x[array(1,2), 0]
         get {
             let idx = i.copy()
@@ -208,7 +213,7 @@ public struct matrix {
             self.flat[idx * self.columns.double + k.double] = newValue
         }
     }
-    subscript(i: matrix) -> ndarray {
+    public subscript(i: matrix) -> ndarray {
         // x[x < 5]
         get {
             return self.flat[i.flat]
@@ -217,7 +222,7 @@ public struct matrix {
             self.flat[i.flat] = newValue
         }
     }
-    subscript(i: Int, k: ndarray) -> ndarray {
+    public subscript(i: Int, k: ndarray) -> ndarray {
         // x[0, array(1,2)]
         get {
             let x:ndarray = self.flat[i.double * self.columns.double + k]

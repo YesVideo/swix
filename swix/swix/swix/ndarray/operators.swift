@@ -139,7 +139,7 @@ public func ^ (lhs: ndarray, rhs: ndarray) -> ndarray{
 public func ^ (lhs: Double, rhs: ndarray) -> ndarray{
     return pow(lhs, y: rhs)}
 // PLUS
-infix operator + {associativity none precedence 140}
+infix operator + {associativity none precedence 130}
 public func + (lhs: ndarray, rhs: ndarray) -> ndarray{
     return make_operator(lhs, operation: "+", rhs: rhs)}
 public func + (lhs: Double, rhs: ndarray) -> ndarray{
@@ -147,7 +147,7 @@ public func + (lhs: Double, rhs: ndarray) -> ndarray{
 public func + (lhs: ndarray, rhs: Double) -> ndarray{
     return make_operator(lhs, operation: "+", rhs: rhs)}
 // MINUS
-infix operator - {associativity none precedence 140}
+infix operator - {associativity none precedence 130}
 public func - (lhs: ndarray, rhs: ndarray) -> ndarray{
     return make_operator(lhs, operation: "-", rhs: rhs)}
 public func - (lhs: Double, rhs: ndarray) -> ndarray{

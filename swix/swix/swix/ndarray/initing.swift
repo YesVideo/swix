@@ -71,7 +71,7 @@ public func array(numbers: Double...) -> ndarray{
     }
     return x
 }
-func asarray(x: [Double]) -> ndarray{
+public func asarray(x: [Double]) -> ndarray{
     // convert a grid of double's to an array
     var y = zeros(x.count)
     y.grid = x
